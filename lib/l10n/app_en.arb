@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "temp": "Temperature",
+  "feel": "Feels like",
+  "wind": "Wind",
+  "humidity": "Humidity",
+  "uv": "UV index",
+  "pressure": "Pressure",
+  "visibility": "Visibility",
+  "dewPoint": "Dew point",
+  "precipitation_notice": "No precipitation within 1 hour",
+  "cloudiness": "Cloudiness",
+  "pop": "Probability of precipitation",
+  "precipitation": "Precipitation",
+  "snow": "Snow",
+  "tab1": "Weather",
+  "tab2": "Cities"
+
+}
