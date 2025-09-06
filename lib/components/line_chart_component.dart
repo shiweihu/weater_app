@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
 
-import '../core/location_api.dart';
+import '../core/utils.dart';
 import '../model/weather_models.dart';
 
 class LineChartPrecipitation extends StatefulWidget {
@@ -73,7 +73,7 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.normal,
       fontSize: 16,
     );
     Widget text;
@@ -109,8 +109,8 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
+      fontWeight: FontWeight.w300,
+      fontSize: 12,
     );
     String text;
 
@@ -123,7 +123,7 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
     // }else{
     //   return Container();
     // }
-    text = "${value}mm";
+    text = "$value mm";
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
@@ -179,7 +179,7 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
         ),
       ),
       borderData: FlBorderData(
-        show: true,
+        show: false,
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: widget.minutely[0].dt.toDouble(),
@@ -204,10 +204,10 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
           gradient: LinearGradient(
             colors: gradientColors,
           ),
-          barWidth: 5,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: const FlDotData(
-            show: false,
+            show: true,
           ),
           belowBarData: BarAreaData(
             show: true,

@@ -1,18 +1,52 @@
+import 'dart:ui';
+
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/db/dao/weather_dao.dart';
 import 'package:weather_app/pages/cities_list.dart';
 import 'package:weather_app/pages/current_weather.dart';
+import 'package:workmanager/workmanager.dart';
 
+
+import 'core/constants.dart';
 import 'core/geocoding _provide.dart';
-import 'core/location_api.dart';
+import 'core/utils.dart';
+import 'core/task.dart';
 import 'db/app_database.dart';
 import 'db/dao/places_dao.dart';
 import 'l10n/app_localizations.dart';
 
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    // 1) 注册可用插件（path_provider、等）
+    DartPluginRegistrant.ensureInitialized();
+    // 2) 重新实例化数据库（不要复用 UI 单例）
+    final db = AppDatabase();
+    if (task == taskSyncData) {
+      //await syncDataToServer();
+      return await syncWeatherForLocations(db);
+    }
+    return true;
+  });
+}
+
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Workmanager().initialize(callbackDispatcher,isInDebugMode: kDebugMode);
+  Workmanager().registerPeriodicTask(
+      "hourly-sync",
+      taskSyncData,
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+      frequency: Duration(hours: 1),        // Android: minimum 15 minutes
+      initialDelay: Duration(seconds: 5),   // Wait before first execution
+      //constraints: Constraints(networkType: NetworkType.connected),
+      inputData: {}
+  );
   runApp(const MyApp());
 }
 
@@ -29,6 +63,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<AppDatabase, PlacesDao>(
           update: (_, db, __) => PlacesDao(db),
           //dispose: (_,dao)=>dao.close()
+        ),
+        ProxyProvider<AppDatabase, WeatherDao>(
+          update: (_, db, __) => WeatherDao(db),
         ),
       ],
       child: MaterialApp(

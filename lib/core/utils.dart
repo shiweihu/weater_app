@@ -1,6 +1,12 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
+bool isOverHalfHours(int dt,{Duration maxAge = const Duration(minutes: 30)}){
+  final dtUtc = DateTime.fromMillisecondsSinceEpoch(dt * 1000, isUtc: true);
+  final nowUtc = DateTime.now().toUtc();
+  return nowUtc.difference(dtUtc) > maxAge;
+}
+
 String weekdayFromDt(
   int dt, {
   int? offsetSec,

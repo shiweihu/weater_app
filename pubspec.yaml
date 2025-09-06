@@ -32,10 +32,12 @@ environment:
 
 
 dependencies:
+  workmanager: ^0.8.0
   fl_chart: ^1.1.0
   google_fonts: ^6.2.1
   drift: ^2.28.1
   drift_flutter: ^0.2.5
+  sqlite3_flutter_libs: ^0.5.39
   path_provider: ^2.1.5
   provider: ^6.0.5
   geolocator: ^13.0.1

@@ -9,7 +9,7 @@ import '../model/weather_models.dart';
 class WeatherService {
   static const String apiKey = "d60b47b603250398b604e44c35be1f02";
 
-  Future<WeatherResponse> fetchCurrentWeather(
+  static Future<WeatherResponse> fetchCurrentWeather(
     double lat,
     double lon, {
     String lang = 'en',
@@ -40,7 +40,7 @@ class WeatherService {
     }
   }
 
-  Future<PlaceResponse> reverseGeocoding(double lat, double lon) async {
+  static Future<PlaceResponse> reverseGeocoding(double lat, double lon) async {
     // 定义参数
     final params = {
       'lat': lat.toString(),

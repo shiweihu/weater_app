@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/model/weather_models.dart';
 
-import '../core/location_api.dart';
+import '../core/utils.dart';
 import '../l10n/app_localizations.dart';
 
 class HoursDetail extends StatefulWidget{
