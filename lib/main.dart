@@ -41,7 +41,7 @@ void main() {
   Workmanager().registerPeriodicTask(
       "hourly-sync",
       taskSyncData,
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingWorkPolicy.keep,
       frequency: Duration(hours: 1),        // Android: minimum 15 minutes
       initialDelay: Duration(seconds: 5),   // Wait before first execution
       //constraints: Constraints(networkType: NetworkType.connected),

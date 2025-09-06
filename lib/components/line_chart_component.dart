@@ -174,13 +174,14 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
             showTitles: true,
             interval: 1,
             getTitlesWidget: leftTitleWidgets,
-            reservedSize: 50,
+            reservedSize: 40,
           ),
         ),
       ),
       borderData: FlBorderData(
-        show: false,
-        border: Border.all(color: const Color(0xff37434d)),
+        show: true,
+        //border: Border.all(color: const Color(0xff37434d)),
+        border: Border(left: BorderSide(color: const Color(0xff37434d)))
       ),
       minX: widget.minutely[0].dt.toDouble(),
       maxX: widget.minutely[widget.minutely.length-1].dt.toDouble(),
@@ -205,9 +206,9 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
             colors: gradientColors,
           ),
           barWidth: 2,
-          isStrokeCapRound: true,
+          isStrokeCapRound: false,
           dotData: const FlDotData(
-            show: true,
+            show: false,
           ),
           belowBarData: BarAreaData(
             show: true,
