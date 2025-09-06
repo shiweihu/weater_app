@@ -253,20 +253,23 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
             )),
           )
         ];
-        final indicesBody = SliverGrid(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150.0,
-            mainAxisSpacing: 1.0,
-            crossAxisSpacing: 1.0,
-            childAspectRatio: 1.5,
-          ),
-          delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-              return indicesWidget[index];
-            },
-            childCount: indicesWidget.length,
-          ),
-        );
+        final indicesBody = SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 1.0,
+              crossAxisSpacing: 1.0,
+              childAspectRatio: 1.2,
+            ),
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return indicesWidget[index];
+              },
+              childCount: indicesWidget.length,
+            ),
+          )
+        ); 
 
         final hoursWidget = weatherData.hourly.map((hourly) {
           return SizedBox(
@@ -346,47 +349,48 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
         );
 
         final dailyList = weatherData.daily;
-        final dailyBody = SliverList(
-          delegate: SliverChildBuilderDelegate(childCount: dailyList.length, (
-              context,
-              index,
-              ) {
-            final daily = dailyList[index];
-            return Card(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              elevation: 1,
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                    top: 30,
-                    bottom: 30,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        weekdayFromDt(
-                          daily.dt,
-                          offsetSec: weatherData.timezoneOffset,
+        final dailyBody = SliverPadding(padding: EdgeInsets.only(left: 10,right: 10,bottom: 10),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(childCount: dailyList.length, (
+                context,
+                index,
+                ) {
+              final daily = dailyList[index];
+              return Card(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                elevation: 1,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {},
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                      top: 30,
+                      bottom: 30,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          weekdayFromDt(
+                            daily.dt,
+                            offsetSec: weatherData.timezoneOffset,
+                          ),
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        '${daily.temp.min.round()}°C-${daily.temp.max.round()}°C',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
+                        Text(
+                          '${daily.temp.min.round()}°C-${daily.temp.max.round()}°C',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          }),
-        );
+              );
+            }),
+          ),);
 
         return CustomScrollView(
           slivers: <Widget>[
