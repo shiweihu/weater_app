@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/db/dao/weather_dao.dart';
 
+import '../components/daily_detail_component.dart';
 import '../components/hours_detail_component.dart';
 import '../components/line_chart_component.dart';
 import '../core/utils.dart';
@@ -281,15 +282,30 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
                 onTap: () {
-                  Scaffold.of(context).showBottomSheet((BuildContext context) {
-                    return SizedBox(
-                      height: 700,
-                      child: HoursDetail(
-                        hourly: hourly,
-                        offsetSec: weatherData.timezoneOffset,
-                      ),
-                    );
-                  });
+                  showModalBottomSheet<void>(
+                    context: context,
+                    showDragHandle: true,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    constraints: BoxConstraints(
+                      maxHeight: 0.8 * MediaQuery.of(context).size.height, // 允许到整屏
+                    ),
+                    builder: (BuildContext context) {
+                      return HoursDetail(
+                              hourly: hourly,
+                              offsetSec: weatherData.timezoneOffset,
+                            );
+                    },
+                  );
+                  // Scaffold.of(context).showBottomSheet((BuildContext context) {
+                  //   return SizedBox(
+                  //     height: 700,
+                  //     child: HoursDetail(
+                  //       hourly: hourly,
+                  //       offsetSec: weatherData.timezoneOffset,
+                  //     ),
+                  //   );
+                  // });
                 },
                 child: Padding(
                   padding: EdgeInsetsGeometry.directional(
@@ -362,7 +378,20 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      showDragHandle: true,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height, // 允许到整屏
+                      ),
+                      builder: (BuildContext context) {
+                        return DailyDetail(daily: daily,offsetSec: weatherData.timezoneOffset);
+                      },
+                    );
+                  },
                   child: Padding(
                     padding: EdgeInsets.only(
                       left: 10,
