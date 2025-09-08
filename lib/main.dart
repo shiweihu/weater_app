@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0x00f59e0b), // ← 你的品牌主色/想要的主题色
+            seedColor: const Color(0xFFFFFFFF), // ← 你的品牌主色/想要的主题色
             brightness: Brightness.light,
           ),
           textTheme: GoogleFonts.interTextTheme(),

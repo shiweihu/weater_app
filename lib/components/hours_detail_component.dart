@@ -17,130 +17,37 @@ class HoursDetail extends StatelessWidget{
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final weather = hourly.weather[0];
-    final indicesWidget = [
-      SizedBox(height: 20),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.pop,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${((hourly.pop ?? 0.0) * 100).round()}%',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.precipitation,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.rain1h ?? 0.0}mm/h',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.snow,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.snow1h ?? 0.0}mm/h',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
 
-                  Text(localization.pressure,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.pressure}',style: Theme.of(context).textTheme.bodyLarge)
-                ]
+    Map<String, String> dataMap = {
+      localization.pop:'${hourly.pop ?? 0.0}%',
+      localization.precipitation:'${hourly.rain1h ?? 0.0}mm/h',
+      localization.snow:'${hourly.snow1h ?? 0.0}mm/h',
+      localization.pressure:'${hourly.pressure}',
+      localization.humidity:'${hourly.humidity}%',
+      localization.dewPoint:'${hourly.dewPoint}°C',
+      localization.uv:'${hourly.uvi}',
+      localization.cloudiness:'${hourly.clouds}%',
+      localization.visibility:'${hourly.visibility}',
+      localization.wind:'${hourly.windSpeed}m/s',
+    };
+
+    final List<Widget> indicesWidgets = dataMap.entries.map((e) {
+      return Padding(padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 1),child: Card(
+          elevation: 0.1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(e.key, style: Theme.of(context).textTheme.titleLarge),
+                Text(e.value, style: Theme.of(context).textTheme.bodyLarge),
+              ],
             ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.humidity ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.humidity}%',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.dewPoint ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.dewPoint}°C',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.uv ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.uvi}',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.cloudiness ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.clouds}%',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.visibility ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.visibility}',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      ),
-      Padding(padding: EdgeInsets.only(left: 10,right: 10),
-          child:Column(children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localization.wind ,style: Theme.of(context).textTheme.titleLarge),
-                  Text('${hourly.windSpeed}m/s',style: Theme.of(context).textTheme.bodyLarge)
-                ]
-            ),
-            Divider()
-          ],)
-      )
-    ];
+          )));
+    }).toList();
+
+
+    //
 
     return Column(
       children: [
@@ -157,7 +64,11 @@ class HoursDetail extends StatelessWidget{
             ]),
         Text('${hourly.temp.round()}°C',style:Theme.of(context).textTheme.displayLarge),
         Text('${localization.feel}:${hourly.feelsLike.round()}°C',style:Theme.of(context).textTheme.bodyLarge),
-        ...indicesWidget
+        SizedBox(height: 10,),
+        Expanded(child: SingleChildScrollView(child:Column(children: [
+          ...indicesWidgets
+        ]))),
+        SizedBox(height: 50,),
       ],
     );
   }

@@ -288,13 +288,13 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
                     isScrollControlled: true,
                     useSafeArea: true,
                     constraints: BoxConstraints(
-                      maxHeight: 0.8 * MediaQuery.of(context).size.height, // 允许到整屏
+                      maxHeight: 0.9 * MediaQuery.of(context).size.height, // 允许到整屏
                     ),
                     builder: (BuildContext context) {
-                      return HoursDetail(
-                              hourly: hourly,
-                              offsetSec: weatherData.timezoneOffset,
-                            );
+                      return  HoursDetail(
+                        hourly: hourly,
+                        offsetSec: weatherData.timezoneOffset,
+                      );
                     },
                   );
                   // Scaffold.of(context).showBottomSheet((BuildContext context) {
