@@ -23,10 +23,10 @@ Future<bool> syncWeatherForLocations(AppDatabase appDatabase) async {
          final weatherRow = await appDatabase.weatherDao.getWeatherByPlaceId(place.id);
          if(weatherRow != null){
             if(isOverHalfHours(weatherRow.dt)){
-               updateWeather(place);
+               await updateWeather(place);
             }
          }else{
-            updateWeather(place);
+            await updateWeather(place);
          }
       }
       return Future.value(true);

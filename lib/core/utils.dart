@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
-bool isOverHalfHours(int dt,{Duration maxAge = const Duration(minutes: 30)}){
+bool isOverHalfHours(int dt,{Duration maxAge = const Duration(seconds: 10)}){
   final dtUtc = DateTime.fromMillisecondsSinceEpoch(dt * 1000, isUtc: true);
   final nowUtc = DateTime.now().toUtc();
   return nowUtc.difference(dtUtc) > maxAge;

@@ -131,7 +131,7 @@ class _LineChartPrecipitationState extends State<LineChartPrecipitation> {
 
     final  maxPrecipitation = widget.minutely.reduce((e,e1){
       return e.precipitation > e1.precipitation ? e : e1;
-    }).precipitation.ceil();
+    }).precipitation;
 
 
     return LineChartData(

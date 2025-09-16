@@ -85,6 +85,7 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
         final weatherData = weatherProvider.convertJsonToWeatherResponse(weatherRow.payloadJson);
         final weather = weatherData.current.weather[0];
         final topBar = Container(
+          color:  Theme.of(context).colorScheme.primaryContainer,
           alignment: Alignment.topCenter,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +124,6 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
             ],
           ),
         );
-
         final chartWidget = weatherData.minutely.any((e) => e.precipitation > 0)
             ? SliverToBoxAdapter(
           child: Padding(padding: EdgeInsets.only(left: 10,right: 10),
@@ -142,118 +142,34 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
         );
 
         final indices = weatherData.current;
-        final indicesWidget = [
-          Card(
-              color: Theme.of(context).colorScheme.primaryContainer,
+        final indicesWidget = <(IconData, String, String)>[
+          (Icons.air,                   localization.wind,      '${indices.windSpeed} m/s'),
+          (Icons.water_drop_outlined,   localization.humidity,  '${indices.humidity}%'),
+          (Icons.speed,                 localization.pressure,  '${indices.pressure} hPa'),
+          (Icons.visibility_outlined,   localization.visibility,'${indices.visibility} m'),
+          (Icons.device_thermostat,     localization.dewPoint,  '${indices.dewPoint}°C'),
+          (Icons.wb_sunny_outlined,     localization.uv,        '${indices.uvi}'),
+        ].map((e){
+          return Card(
+              color: Theme.of(context).colorScheme.tertiaryContainer,
               child: Padding(padding: EdgeInsets.all(10),child:Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.air),
+                  Icon(e.$1),
                   Text(
-                    localization.wind,
+                    e.$2,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    "${indices.windSpeed}m/s",
+                    e.$3,
                     style: Theme.of(context).textTheme.bodyMedium,
                   )
 
                 ],
               ) )
-          ),
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: EdgeInsets.all(10),child:Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.water_drop_outlined),
-                Text(
-                  localization.humidity,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  "${indices.humidity}%",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-
-              ],
-            )),
-          ),
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: EdgeInsets.all(10),child:Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.speed),
-                Text(
-                  localization.pressure,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  "${indices.pressure}",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            )),
-          ),
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: EdgeInsets.all(10),child:Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.visibility_outlined),
-                Text(
-                  localization.visibility,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  "${indices.visibility}m",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            )),
-          ),
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: EdgeInsets.all(10),child:Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.device_thermostat),
-                Text(
-                  localization.dewPoint,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  "${indices.dewPoint}°C",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            )),
-          ),
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: EdgeInsets.all(10),child:Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.wb_sunny_outlined),
-                Text(
-                  localization.uv,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  "${indices.uvi}",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            )),
-          )
-        ];
+          );
+        }).toList();
         final indicesBody = SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             sliver: SliverGrid(
@@ -277,7 +193,7 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
             width: 100,
             height: 150,
             child: Card(
-              color: Theme.of(context).colorScheme.surfaceContainer,
+              color: Theme.of(context).colorScheme.tertiaryContainer,
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
@@ -373,7 +289,7 @@ class CurrentWeatherState extends State<CurrentWeatherWidget> {
                 ) {
               final daily = dailyList[index];
               return Card(
-                color: Theme.of(context).colorScheme.surfaceContainer,
+                color: Theme.of(context).colorScheme.tertiaryContainer,
                 elevation: 1,
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(

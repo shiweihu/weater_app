@@ -29,9 +29,10 @@ class WeatherResponse {
     timezone: json['timezone'],
     timezoneOffset: json['timezone_offset'],
     current: Current.fromJson(json['current']),
-    minutely: (json['minutely'] as List<dynamic>)
-        .map((e) => Minutely.fromJson(e))
-        .toList(),
+    minutely: (json['minutely'] as List?)
+          ?.map((e) => Minutely.fromJson(e as Map<String, dynamic>))
+          .toList()
+          ?? const <Minutely>[],
     hourly: (json['hourly'] as List<dynamic>)
         .map((e) => Hourly.fromJson(e))
         .toList(),

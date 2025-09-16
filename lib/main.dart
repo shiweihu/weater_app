@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/db/dao/weather_dao.dart';
+import 'package:weather_app/db/db_isolate.dart';
 import 'package:weather_app/pages/cities_list.dart';
 import 'package:weather_app/pages/current_weather.dart';
 import 'package:workmanager/workmanager.dart';
@@ -24,30 +26,46 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     // 1) 注册可用插件（path_provider、等）
     DartPluginRegistrant.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
     // 2) 重新实例化数据库（不要复用 UI 单例）
-    final db = AppDatabase();
-    if (task == taskSyncData) {
-      //await syncDataToServer();
-      return await syncWeatherForLocations(db);
+    final db = await getDbInstance();
+    try {
+      switch (task) {
+        case taskSyncData:
+        // 确保这个函数返回 bool
+          return await syncWeatherForLocations(db);
+        default:
+          return true; // 未知任务按成功处理或改成 false 也行
+      }
+    } catch (e, st) {
+      if (kDebugMode) {
+        print('Workmanager error: $e\n$st');
+      }
+      return false; // Workmanager 需要 bool
+    } finally {
+      await db.close();
     }
-    return true;
   });
 }
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Workmanager().initialize(callbackDispatcher,isInDebugMode: kDebugMode);
   Workmanager().registerPeriodicTask(
       "hourly-sync",
       taskSyncData,
-      existingWorkPolicy: ExistingWorkPolicy.keep,
-      frequency: Duration(hours: 1),        // Android: minimum 15 minutes
-      initialDelay: Duration(seconds: 5),   // Wait before first execution
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+      frequency: Duration(minutes: 15),        // Android: minimum 15 minutes
+      initialDelay: Duration(minutes: 1),   // Wait before first execution
       //constraints: Constraints(networkType: NetworkType.connected),
       inputData: {}
   );
-  runApp(const MyApp());
+  final db = await getDbInstance();
+  runApp(Provider<AppDatabase>(
+    create: (context) => db,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -59,7 +77,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (_) => GeocodingProvider()),
-        Provider(create: (_) => AppDatabase(), dispose: (_, db) => db.close()),
         ProxyProvider<AppDatabase, PlacesDao>(
           update: (_, db, __) => PlacesDao(db),
           //dispose: (_,dao)=>dao.close()
@@ -76,7 +93,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFFFFFFFF), // ← 你的品牌主色/想要的主题色
+            seedColor: const Color(0xFFFF00FF), // ← 你的品牌主色/想要的主题色
             brightness: Brightness.light,
           ),
           textTheme: GoogleFonts.interTextTheme(),
@@ -166,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
       CitiesListComponent(), // 对应索引 1
     ];
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
